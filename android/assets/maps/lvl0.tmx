@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="left-down" width="250" height="11" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="86">
+ <tileset firstgid="1" source="wboLibgdxHulaj/roguelikecitymgntkopia.tsx"/>
+ <tileset firstgid="1037" name="roguelikecitymgnt" tilewidth="64" tileheight="64" spacing="4" tilecount="1036" columns="37">
+  <image source="wboLibgdxHulaj/roguelikecitymgnt.png" trans="ff00ff" width="2515" height="1902"/>
+ </tileset>
+ <tileset firstgid="2073" source="wboLibgdxHulaj/roguelikecitymymod.tsx"/>
+ <layer id="1" name="background" width="250" height="11">
+  <data encoding="base64" compression="zlib">
+   eJzt2LEKwjAUheFLDekq9D3cHNx9SB/GIaPg3Po6IiJWKVra3twk/YcP0uUkF3IINIhIAFC0M4AkhQVZz4I8dP7pVL/XY1mfPVc3r+OwEdk6kWbA3s3LHcp80Zrnl2OdVg4QCz23ywE0tT3/et76ab57vqs+v6fmzvHoZ0o5a2V9/9eI99wuB4iFntvlAJouTl//H2KM/Up2rZZnPVPOrPubUs+BUgUBgDTcAR/qbsI=
+  </data>
+ </layer>
+ <layer id="2" name="foreground" width="250" height="11">
+  <data encoding="base64" compression="zlib">
+   eJzt2j1OwzAYBuAvcZsMdKjECWBDDF1Agg0kjsAawc4N2mOwlL+BhZEdKQMjEnNh6wW4AkjYKlZsN45/4tRJ8PAIE5zPcZSXSHYmEcDkzysUbddI7TquLWpM4/rj9k1mcE/GuO9BuIe98DYo0N+TmD9O5bBS9jeZYbw+DiuTjCV6iczGJWaatXUcOar1FPNcXZ/KHQK4xx6Q/jk055u6xoDnMuc5oyqPRA7mlpG67n5Urercqvw9GjyjrnLcVnM8vxvs1mCeNOdXKcD3FsAPNk9XPpLip9hm+Z53l30m7pyiwjE2xvW3SxwO+L4mSF18emndPXA7H11naTvq4NMr+bg3FM05ae+MAHZHfq8ncEOV8zp1Q87LdSXnQbctGKqcLxI7Ys5T4HNuW7cOks821FHl3Me9oWjOmxzD9/P/H7XtfT5t8F3S5ff5e6yn7tzC+7w/TlBBlXO2rwnbnM86lnOy92d6vknOSXbZdXO2TbMtHpP1F/uVXVvIeX+w63uqdXHZHthQsYarqisjWy/X3YvT7eeKzd6fyfVfIH7dnG1naEU8JuvPti8le21hX03Nd36byLnMUvF829b15QsVdPo/A6+qr8v/PTbfM5gIOVdzucfdpPNo83zPuStsvldwgY4fvofrj193Jwzp
+  </data>
+ </layer>
+ <objectgroup id="3" name="coins" offsetx="-320" offsety="-128">
+  <object id="31" x="1024" y="640" width="64" height="64"/>
+  <object id="32" x="2368" y="192" width="64" height="64"/>
+  <object id="33" x="3200" y="640" width="64" height="64"/>
+  <object id="34" x="3392" y="256" width="64" height="64"/>
+  <object id="35" x="3840" y="640" width="64" height="64"/>
+  <object id="36" x="4544" y="256" width="64" height="64"/>
+  <object id="37" x="5056" y="192" width="64" height="64"/>
+  <object id="38" x="6208" y="704" width="64" height="64"/>
+  <object id="39" x="6912" y="640" width="64" height="64"/>
+  <object id="40" x="8256" y="128" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="4" name="evilground" offsetx="1152" offsety="448">
+  <object id="55" x="-1152" y="-256" width="256" height="320"/>
+  <object id="56" x="-448" y="-256" width="960" height="320"/>
+  <object id="57" x="-1152" y="192" width="2112" height="64"/>
+  <object id="58" x="960" y="256" width="1600"/>
+  <object id="59" x="2560" y="192" width="2816" height="64"/>
+  <object id="60" x="5376" y="192" width="64" height="64"/>
+  <object id="61" x="6848" y="-448" width="512" height="64"/>
+  <object id="62" x="4608" y="-448" width="2176" height="64"/>
+  <object id="63" x="2240" y="-448" width="2368" height="64"/>
+  <object id="64" x="-128" y="-448" width="2368" height="64"/>
+  <object id="65" x="-1216" y="-448" width="1088" height="64"/>
+  <object id="66" x="960" y="-256" width="1856" height="320"/>
+  <object id="67" x="960" y="192" width="1600" height="64"/>
+  <object id="68" x="2432" y="704"/>
+ </objectgroup>
+ <objectgroup id="5" name="solids" offsetx="1408" offsety="-128">
+  <object id="69" x="-1088" y="192" width="64" height="64"/>
+  <object id="70" x="-320" y="704" width="64" height="64"/>
+  <object id="71" x="128" y="256" width="64" height="64"/>
+  <object id="72" x="1280" y="192" width="64" height="64"/>
+  <object id="73" x="1088" y="640" width="64" height="64"/>
+  <object id="74" x="2112" y="256" width="64" height="64"/>
+  <object id="75" x="3008" y="704" width="192" height="64"/>
+  <object id="76" x="3776" y="704" width="256" height="64"/>
+  <object id="77" x="3904" y="640" width="64" height="64"/>
+  <object id="78" x="4480" y="192" width="256" height="64"/>
+  <object id="79" x="5504" y="640" width="192" height="64"/>
+  <object id="80" x="5696" y="640" width="192" height="64"/>
+  <object id="81" x="6016" y="640" width="192" height="64"/>
+  <object id="82" x="6272" y="640" width="192" height="64"/>
+  <object id="83" x="6464" y="640" width="192" height="64"/>
+  <object id="84" x="6656" y="640" width="192" height="64"/>
+  <object id="85" x="6400" y="256" width="192" height="64"/>
+ </objectgroup>
+</map>
