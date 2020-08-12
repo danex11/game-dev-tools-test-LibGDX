@@ -48,8 +48,8 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
     SpriteBatch batch;
 
     // .. deb>
-   TextureRegion backgroundTexture;
-    
+    TextureRegion backgroundTexture;
+
     //  http://www.pixnbgames.com/blog/libgdx/how-to-use-libgdx-tiled-drawing-with-libgdx/
     // .. Tiled map
     private TiledMap map;
@@ -118,7 +118,7 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
         plrSprite = new Sprite(plrImg);
         //deb>
         touchSprite = new Sprite(plrImg);
-        //plrSprite.setPosition(0,0);
+        plrSprite.setPosition(0,h/2);
 
         //plr Body - and set its position to this of plrSprite
         BodyDef plrBodyDef = new BodyDef();
@@ -132,7 +132,7 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
         PolygonShape plrShape = new PolygonShape();
         plrShape.setAsBox(plrSprite.getWidth() / 2, plrSprite.getHeight() / 2);
         plrFixture.shape = plrShape;
-        plrFixture.density = 0.1f;
+        plrFixture.density = 1f;
         //elasticity
         plrFixture.restitution = 0.08f;
         //what I am
@@ -187,7 +187,7 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
         //camera.update();
 
         //deb>
-         backgroundTexture = new TextureRegion(new Texture("background.png"), 0, 0, 2048, 563);
+        backgroundTexture = new TextureRegion(new Texture("background.png"), 0, 0, 2048, 563);
     }
 
 
@@ -204,6 +204,7 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
         // from the updated physics body plrBody location
         plrSprite.setPosition((plrBody.getPosition().x) - plrSprite.getWidth() / 2,
                 (plrBody.getPosition().y) - plrSprite.getHeight() / 2);
+        //plrSprite - set the sprite's rotation
         plrSprite.setRotation((float) Math.toDegrees(plrBody.getAngle()));
 //deb>
 /*
@@ -218,15 +219,12 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
  */
 
 
-
-
-       // render Tiles
+        // render Tiles
         //test> renderer.render();
 
 
-
         batch.setProjectionMatrix(camera.combined);
-       // ****** BATCH BEGIN
+        // ************************************************ BATCH BEGIN
         batch.begin();
 
         //deb>
@@ -242,12 +240,13 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
                 plrSprite.getWidth(), plrSprite.getHeight(),
                 plrSprite.getScaleX(), plrSprite.getScaleY(),
                 plrSprite.getRotation());
-
-        batch.draw(touchSprite, touchX,touchY);
+        if (touchWorldPos != null) {
+            batch.draw(touchSprite, touchWorldPos.x, h - touchWorldPos.y);
+        }
         //deb>
         // set camera to follow touch point
         camera.position.set(
-                plrSprite.getX() + w/2,
+                plrSprite.getX() + w / 2 - 200,
                 h / 2,
                 0
         );
@@ -272,8 +271,16 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
     }
 
 
+    Vector2 plrBodyScreenPosV2 = new Vector2(0,0);
+    Vector2 touchScreenPosV2 = new Vector2(0,0);
+
+
+
     //  **************    UPDATE
     public void update() {
+
+        this.plrBody.applyLinearImpulse(touchScreenPosV2, plrBodyScreenPosV2, true);
+
 
 
     }
@@ -299,21 +306,29 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
     //ccccccccccccccccccc Android methods
     float touchX;
     float touchY;
+    Vector3 touchWorldPos;
 
+
+    //todo calculate force vector to move in specific direction
+    //   https://gamedev.stackexchange.com/questions/127640/how-to-calculate-move-forward-direction-in-libgdx-with-box2d-body
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         //  plrBody.applyForce(100000f, 100f, screenX, screenY, true);
         // plrBody.applyTorque(400000f, true);
         //force in pixels/s
         // plrBody.applyForceToCenter(000f, 1000000000f, true);
-        touchX =    Gdx.input.getX() ;
+        //
+        touchX = Gdx.input.getX();
         touchY = h - Gdx.input.getY();
-        Vector3 touchScreenPos = new Vector3(touchX,touchY,0);
-        Gdx.app.log("tagGdx", "touchDown xy " + touchX +" "+ touchY);
-        Gdx.app.log("tag", "sprite get xy: "+ plrSprite.getX()+ " "+plrSprite.getY());
+        //d>  Gdx.app.log("tagGdx", "touchXY " + touchX +" "+ touchY);
+        Vector3 touchScreenPos = new Vector3(touchX, touchY, 0);
+        //d>  Gdx.app.log("tagGdx", "Vector3touchScreenPosXY " + touchScreenPos.x + touchScreenPos.y);
+        //d>Gdx.app.log("tag", "sprite get xy: "+ plrSprite.getX()+ " "+plrSprite.getY());
         //camera.unproject(touchScreenPos);
-       // Vector3 touchWorldPos = stage.getCamera().unproject(touchScreenPos);
-        Vector3 touchWorldPos = camera.unproject(touchScreenPos);
+        // Vector3 touchWorldPos = stage.getCamera().unproject(touchScreenPos);
+        Vector3 touchScreenPosTemp = new Vector3(touchX, touchY, 0);
+        touchWorldPos = new Vector3(camera.unproject(touchScreenPosTemp));
+        //d> Gdx.app.log("tagGdx", "Vector3touchScreenPosXYafterUnproj " + touchScreenPos.x + touchScreenPos.y);
 //https://badlogicgames.com/forum/viewtopic.php?f=11&t=20536
 
 
@@ -321,41 +336,83 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
         //Vector2 plrBody = this.plrBody.getPosition();
         Vector3 plrBodyWorldPos = new Vector3(plrSprite.getX(), plrSprite.getY(), 0);
         //project body coordinates in the world to coordinates on the screen
-        Vector3 plrBodyScreenPos = camera.project(plrBodyWorldPos);
+        Vector3 plrBodyWorldPosTemp = new Vector3(plrSprite.getX(), plrSprite.getY(), 0);
+        Vector3 plrBodyScreenPos = new Vector3(camera.project(plrBodyWorldPosTemp));
+        // Gdx.app.log("tag", "touchScreenPos=plrBodyScreenPos.y  " + touchScreenPos.y + "=" + plrBodyScreenPos.y);
 
-
-        //todo decide if we are comparing in worldCoords  (unproject touchPos to worldCoords) or in screenCoords (project bodyPos to screenPos)
+        int straightMargin = (int) plrSprite.getHeight() + 20;
+        plrBodyScreenPosV2 = new Vector2(plrBodyScreenPos.x, plrBodyScreenPos.y);
+        touchScreenPosV2 = new Vector2(0, 0);
+        // CCC  ---  down Y
+        if ((touchScreenPos.y < plrBodyScreenPos.y-(straightMargin/2))) {
+            Gdx.app.log("tag", "down Y  ");
+            touchScreenPosV2.y = -((h - touchScreenPos.y));
+            if ((touchScreenPos.x < plrBodyScreenPos.x)) {
+                touchScreenPosV2.x = -touchScreenPos.x;
+            } else if ((touchScreenPos.x < plrBodyScreenPos.x)) {
+                touchScreenPosV2.x = touchScreenPos.x;
+            }
+            // CCC  ---  up Y
+        } else if (touchScreenPos.y > plrBodyScreenPos.y+(straightMargin/2)) {
+            Gdx.app.log("tag", "up Y  ");
+            touchScreenPosV2.y = (touchScreenPos.y);
+            if ((touchScreenPos.x < plrBodyScreenPos.x)) {
+                touchScreenPosV2.x = -touchScreenPos.x;
+            } else if ((touchScreenPos.x > plrBodyScreenPos.x)) {
+                touchScreenPosV2.x = touchScreenPos.x;
+            }
+        }
+        // CCC  ---  constant Y
+        else if(touchScreenPos.y >= plrBodyScreenPos.y-(straightMargin/2) && touchScreenPos.y <= plrBodyScreenPos.y+(straightMargin/2)){
+            Gdx.app.log("tag", "constant Y  ");
+            touchScreenPosV2.y = (0);
+            if ((touchScreenPos.x < plrBodyScreenPos.x)) {
+                touchScreenPosV2.x = -touchScreenPos.x;
+            } else if ((touchScreenPos.x > plrBodyScreenPos.x)) {
+                touchScreenPosV2.x = touchScreenPos.x;
+            }
+        }
+        Vector2 plrBodyWorldPosV2 = new Vector2(plrBodyWorldPos.x, plrBodyWorldPos.y);
+        Gdx.app.log("tagGdx", "Vector2touchscreenpos " + touchScreenPosV2);
+        /*
         //todo this control has only 4 fixed directions if done right
         //todo: -draw proper direction vector OR -add dead zone for directions up,down,left,right
+        // we are comparing in in screenCoords (project bodyPos to screenPos)
 // apply left impulse, but only if max velocity is not reached yet
-        if (touchX < plrBodyScreenPos.x) {
-            this.plrBody.applyLinearImpulse(-800f, 0, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
+        if (touchScreenPos.x < plrBodyScreenPos.x) {
             // apply up impulse, but only if max velocity is not reached yet
-            if ((touchY < plrBodyScreenPos.y)) {
+            if ((touchScreenPos.y < plrBodyScreenPos.y)) {
+                this.plrBody.applyLinearImpulse(-800f, 0, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
                 this.plrBody.applyLinearImpulse(0, -800f, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
+                Gdx.app.log("tag", "left and down");
             }
-
             // apply down impulse, but only if max velocity is not reached yet
-            if ((touchY > plrBodyScreenPos.y)) {
+            if ((touchScreenPos.y > plrBodyScreenPos.y)) {
+                this.plrBody.applyLinearImpulse(-800f, 0, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
                 this.plrBody.applyLinearImpulse(0, 800f, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
+                Gdx.app.log("tag", "left and up");
             }
         }
 
 // apply right impulse, but only if max velocity is not reached yet
         // if ((dragX > pos.x) && vel.x < MAX_PLR_VELOCITY) {
-        if ((touchX > plrBodyScreenPos.x)) {
-            this.plrBody.applyLinearImpulse(800f, 0, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
+       else if ((touchScreenPos.x > plrBodyScreenPos.x)) {
             // apply up impulse, but only if max velocity is not reached yet
-            if ((touchY < plrBodyScreenPos.y)) {
+            if ((touchScreenPos.y < plrBodyScreenPos.y)) {
+                this.plrBody.applyLinearImpulse(800f, 0, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
                 this.plrBody.applyLinearImpulse(0, -800f, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
-                Gdx.app.log("tag", "prghi and up");
+                Gdx.app.log("tag", "right and down");
             }
 
             // apply down impulse, but only if max velocity is not reached yet
-            if ((touchY > plrBodyScreenPos.y)) {
+            if ((touchScreenPos.y > plrBodyScreenPos.y)) {
+                this.plrBody.applyLinearImpulse(800f, 0, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
                 this.plrBody.applyLinearImpulse(0, 800f, plrBodyScreenPos.x, plrBodyScreenPos.y, true);
+                Gdx.app.log("tag", "right and up");
             }
         }
+
+         */
         return true;
     }
 
@@ -364,7 +421,8 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
         return false;
     }
 
-    float dragX,dragY;
+    float dragX, dragY;
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 //todo draw Dragg point
@@ -374,14 +432,12 @@ public class GameClassHulaj extends ApplicationAdapter implements InputProcessor
     }
 
 
-
-
-
     //mmmmmmmmmmmmmmmmmmm mouse methods
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         return false;
     }
+
     @Override
     public boolean scrolled(int amount) {
         return false;
