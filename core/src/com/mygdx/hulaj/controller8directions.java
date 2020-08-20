@@ -44,35 +44,39 @@ public class controller8directions {
         /////////////////Vector3 plrBodyScreenPos = new Vector3(camera.project(plrBodyWorldPosTemp));
         // Gdx.app.log("tag", "touchScreenPos=plrBodyScreenPos.y  " + touchScreenPos.y + "=" + plrBodyScreenPos.y);
 
-        int straightMargin = (int) plrSprite.getHeight() + 20;
+        int  widthCorrectiion = (int) (plrSprite.getWidth()/2);
+        int plrPosXWithCorretion = (int) (plrSpriteScreenPos.x+widthCorrectiion);
+        int straightMargin = (int) (1*(plrSprite.getHeight()));// + 30;
         ///////////////////plrBodyScreenPosV2 = new Vector2(plrSpriteScreenPos.x, plrSpriteScreenPos.y);
         Vector2 touchScreenPosV2 = new Vector2(0, 0);
+
         // CCC  ---  down Y
-        if ((touchScreenPosGdx.y < plrSpriteScreenPos.y - (straightMargin / 2))) {
+        if ((touchScreenPosGdx.y < plrSpriteScreenPos.y )) {
             ////////////////////////////Gdx.app.log("tag", "down Y  ");
             touchScreenPosV2.y = -((h - touchScreenPosGdx.y));
-            if ((touchScreenPosGdx.x < plrSpriteScreenPos.x)) {
+            if ((touchScreenPosGdx.x < plrPosXWithCorretion)) {
                 touchScreenPosV2.x = -touchScreenPosGdx.x;
-            } else if ((touchScreenPosGdx.x < plrSpriteScreenPos.x)) {
+            } else if ((touchScreenPosGdx.x > plrPosXWithCorretion)) {
                 touchScreenPosV2.x = touchScreenPosGdx.x;
             }
             // CCC  ---  up Y
-        } else if (touchScreenPosGdx.y > plrSpriteScreenPos.y + (straightMargin / 2)) {
+        } else if (touchScreenPosGdx.y > plrSpriteScreenPos.y + (straightMargin)) {
             /////////////////////////Gdx.app.log("tag", "up Y  ");
             touchScreenPosV2.y = (touchScreenPosGdx.y);
-            if ((touchScreenPosGdx.x < plrSpriteScreenPos.x)) {
+            if ((touchScreenPosGdx.x < plrPosXWithCorretion)) {
                 touchScreenPosV2.x = -touchScreenPosGdx.x;
-            } else if ((touchScreenPosGdx.x > plrSpriteScreenPos.x)) {
+            } else if ((touchScreenPosGdx.x > plrPosXWithCorretion)) {
                 touchScreenPosV2.x = touchScreenPosGdx.x;
             }
         }
         // CCC  ---  constant Y
-        else if (touchScreenPosGdx.y >= plrSpriteScreenPos.y - (straightMargin / 2) && touchScreenPosGdx.y <= plrSpriteScreenPos.y + (straightMargin / 2)) {
+        else if (touchScreenPosGdx.y >= plrSpriteScreenPos.y
+                && touchScreenPosGdx.y <= plrSpriteScreenPos.y + (straightMargin) ) {
             Gdx.app.log("tag", "constant Y  ");
             touchScreenPosV2.y = (0);
-            if ((touchScreenPosGdx.x < plrSpriteScreenPos.x)) {
+            if ((touchScreenPosGdx.x < plrPosXWithCorretion)) {
                 touchScreenPosV2.x = -touchScreenPosGdx.x;
-            } else if ((touchScreenPosGdx.x > plrSpriteScreenPos.x)) {
+            } else if ((touchScreenPosGdx.x > plrPosXWithCorretion)) {
                 touchScreenPosV2.x = touchScreenPosGdx.x;
             }
         }

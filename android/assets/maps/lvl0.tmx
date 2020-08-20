@@ -27,7 +27,7 @@
   <object id="39" x="6912" y="640" width="64" height="64"/>
   <object id="40" x="8256" y="128" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="4" name="evilground" offsetx="1152" offsety="448">
+ <objectgroup id="4" name="evilground" offsetx="0" offsety="0">
   <object id="55" x="-1152" y="-256" width="256" height="320"/>
   <object id="56" x="-448" y="-256" width="960" height="320"/>
   <object id="57" x="-1152" y="192" width="2112" height="64"/>
